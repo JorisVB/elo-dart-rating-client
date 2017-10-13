@@ -1,0 +1,69 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            {{ player.name }}
+            <button ion-button outline item-end>Play</button>
+            </ion-title>                   
+    </ion-navbar>          
+</ion-header>
+<ion-content>    
+    <div padding>
+        <ion-segment [(ngModel)]="period">
+            <ion-segment-button value="All">
+                All
+            </ion-segment-button>
+            <ion-segment-button value="Month">
+                Month
+            </ion-segment-button>
+            <ion-segment-button value="Week">
+                Week
+            </ion-segment-button>
+        </ion-segment>
+    </div>
+
+    <ng-container [ngSwitch]="period">
+        <ng-container *ngFor="let stat of stats">
+            <ng-container *ngSwitchCase="stat.period">
+
+                <ion-card>
+                    <div class="card-title">Rating</div>
+                    <div class="card-content">
+                        <ion-list>
+                            <ion-item>Current: {{ stat.ratingStat.current }}</ion-item>
+                            <ion-item>High: {{ stat.ratingStat.high }}</ion-item>
+                            <ion-item>Low: {{ stat.ratingStat.low }}</ion-item>
+                        </ion-list>
+                    </div>
+                </ion-card>
+
+                <ion-card>
+                    <div class="card-title">Legs</div>
+                    <div class="card-content">
+                        <ion-list>
+                            <ion-item>Played: {{ stat.matchStat.won + stat.matchStat.lost }}</ion-item>
+                            <ion-item>Won: {{ stat.matchStat.won }}</ion-item>
+                            <ion-item>Lost: {{ stat.matchStat.lost }}</ion-item>
+                            <ion-item>Percentage won: {{ statsPct(stat.matchStat.won, stat.matchStat.lost) }} %</ion-item>
+                        </ion-list>
+                    </div>
+                </ion-card>
+
+                <ion-card>
+                    <div class="card-title">Legs against</div>
+                    <div class="card-content">
+                        <ion-item-group *ngFor="let matchStatAgainst of orderedMatchStats(stat.matchStatsAgainst)">
+                            <ion-item-divider color="light">{{ matchStatAgainst.against.name }}</ion-item-divider>
+                            <ion-item>Played: {{ matchStatAgainst.won + matchStatAgainst.lost }}</ion-item>
+                            <ion-item>Won: {{ matchStatAgainst.won }}</ion-item>
+                            <ion-item>Lost: {{ matchStatAgainst.lost }}</ion-item>
+                            <ion-item>Percentage won: {{ statsPct(matchStatAgainst.won, matchStatAgainst.lost) }} %</ion-item>
+                        </ion-item-group>
+                    </div>
+                </ion-card>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</ion-content>
